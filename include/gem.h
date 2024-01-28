@@ -141,6 +141,7 @@ struct SecsSet
 	ushort uBaudrate;
 	std::string sComName;
 	bool bIgnoreDevID;
+	int nDelaySend;
 };
 
 HSMS_API u2 SF(byte uS, byte uF);
@@ -219,6 +220,9 @@ struct HSMS_API SecsMessage
 	SecsMessage(u8 uAddr, ulong uMID, byte uS, byte uF, const ItemPtr& data, HSMSMSGTYPE tp);
 	SecsMessage(byte uS, byte uF, const ItemPtr& data);
 	SecsMessage(byte uS, byte uF, const ItemPtr& data, ulong uMID);
+	VEC getStream(void) const;
+	void fromStream(const VEC& vData);
+	SecsMessage(const VEC& vData);
 };
 
 using funSecsMessageRecv = std::function<int(const SecsMessage& msg)>;
@@ -255,7 +259,7 @@ public:
 	virtual int GetChangeState() = 0;
 	virtual int SetTimeOut(funTimeOut) = 0;
 
-	virtual void SetSmlLog(const std::string& path, int nDay) = 0;
+	virtual void SetSmlLog(const std::string& path, int nDay, int nLogType = 0) = 0;
 };
 
 using GemPtr = std::shared_ptr<CGem>;
